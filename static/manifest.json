@@ -1,0 +1,16 @@
+{
+    "name": "Daniel De Guzman",
+    "short_name": "Daniel De Guzman",
+    "description": "I'm Daniel De Guzman, a full stack web developer from Chattanooga, TN. Let's work together.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#171717",
+    "theme_color": "#d4d4d4",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "any",
+            "type": "image/x-icon"
+        }
+    ]
+}
