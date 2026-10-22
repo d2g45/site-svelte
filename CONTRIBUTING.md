@@ -1,12 +1,21 @@
 # Contributing
 
+## Commits
+
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/). commitlint (`commitlint.config.mjs`) checks them in husky's `commit-msg` hook. `feat`, `fix` and `perf` commits go into the release notes.
+- `pre-commit` runs `npm run lint` and `pre-push` runs `npm run check`, a few seconds each. `npm install` sets the hooks up through the `prepare` script.
+- CI (`.github/workflows/pr-validation.yml`) runs lint, check and the full test suite on every PR and every push to `main`.
+- PRs are squash-merged, so split a PR into commits for review and don't worry about tidying them afterwards.
+- `npm run knip` lists unused files, exports and dependencies. `npm run lighthouse` builds the site and audits `/` on desktop and mobile; the score floors are in `lighthouserc.*.cjs`. Neither runs in CI.
+
 ## Dependency updates
 
-Dependencies are updated in one PR per run, on a `chore/YYYY-MM-package-updates` branch: patch and minor versions in one commit, each major in its own commit, then `npm audit fix`. Nothing runs these checks automatically. The repo has no CI workflow and no git hooks, so every gate below is run by hand.
+Dependencies are updated in one PR per run, on a `chore/YYYY-MM-package-updates` branch: patch and minor versions in one commit, each major in its own commit, then `npm audit fix`. CI runs lint, check and test, and the hooks run lint and check. Everything else below is run by hand.
 
 ### Read first
 
 - `.npmrc` sets `min-release-age=7`. That is intentional: npm won't install a version, direct or transitive, until it is 7 days old. `npm ci` from a complete lockfile ignores it.
+- Only npm 11 honors `min-release-age`. npm 10 (Node 22) ignores it without a warning, and `npm config get min-release-age` still prints 7. Run npm under the Node 24 in `.nvmrc` and check `npm -v` first.
 - Every manifest entry is a caret range. There are no exact pins.
 - The holds and package sets under [ncu flags](#ncu-flags).
 
@@ -30,16 +39,18 @@ ncu --peer --format group --reject typescript
 
 - **Follows by hand: `tailwindcss`.** `@tailwindcss/vite` depends on an exact `tailwindcss` version as a regular dependency, so `--peer` never flags a mismatch. Keep the root `tailwindcss` at the same version as `@tailwindcss/vite`.
 - **Known audit finding: `postcss-selector-parser` 6.0.10** (GHSA-rj75-hqrm-r3gf). `@tailwindcss/typography` 0.5.20 pins it exactly. It is only used at build time, and the fix npm offers is a downgrade to typography 0.5.4. It stays until typography releases with a newer version.
+- **Known audit finding: `basic-ftp` <=6.2.0** (GHSA-c475-qrg2-pj4r), shown as six entries. It comes from `release-it` through `proxy-agent`, `pac-proxy-agent` and `get-uri`, and every `get-uri` requires `basic-ftp@^5.3.1`, while the fix is 6.2.1. It is only reachable when release-it fetches a proxy PAC file over `ftp://`. It stays until `get-uri` allows the fixed version.
+- **Pinned together: the changelog preset.** `overrides` pins `conventional-changelog-conventionalcommits`. Bump it in the same commit as any `@release-it/conventional-changelog` major: v12 needs `^10`, v11 needs `^9`. See [After bumping X](#after-bumping-x).
 
 ### Gates per stage
 
 ```sh
-npm run lint    # prettier --check . && eslint .
+npm run lint    # prettier --check . and eslint . (both run; either failing fails)
 npm run check   # svelte-kit sync && svelte-check
 npm test        # vitest run (server + browser projects), then playwright test
 ```
 
-- Prettier reads `.gitignore` but not your global git ignore file. If you keep `.claude/settings.local.json` ignored globally, lint fails on it. Run `npx prettier --check . '!.claude/**' && npx eslint .` instead.
+- Prettier reads `.gitignore` but not your global git ignore file, so `.prettierignore` lists `.claude/settings.local.json`. Add any other locally ignored file there if lint trips on it.
 - `check` should report 0 errors. The one warning, `globalThis.onpointermove` in `src/lib/components/3d/daniel.svelte`, is known.
 - The Vitest `client` project runs in Chromium through Playwright, and `test:e2e` runs `npm run build && npm run preview` on port 4173. Install browsers once per Playwright version with `npx playwright install chromium`, after checking `~/Library/Caches/ms-playwright`.
 - No services are needed.
@@ -55,7 +66,7 @@ cd ../site-svelte-head && npm ci && npm run check && npm test
 
 ### Clean-tree CI replay
 
-With no CI to replay, run the gates and the build in a fresh worktree of the branch with no `.env`:
+CI runs on a fresh checkout with no `.env`. To replay that locally before pushing, run the gates and the build in a fresh worktree of the branch:
 
 ```sh
 git worktree add --detach ../site-svelte-ci HEAD
@@ -71,12 +82,13 @@ The build warns that some chunks are over 500 kB. That is the three.js chunk, an
 - **`@sveltejs/package`:** compare `dist/` from `npm run prepack` on both trees.
 - **SvelteKit migrations:** `npx sv@<version> migrate <name>` runs `prettier --write` over the whole repo. Review the full diff, not only the files the migration targets.
 - **Vitest and other dev servers:** check GitHub advisories before taking a recent major. Vitest 5.0.0 to 5.0.4 served `.env` from the Browser Mode server (GHSA-p458-7748-mcp3), and this repo's `test.projects` setup exposed it. Outside a terminal, `vitest` runs once and exits, so use `vitest watch` for anything that needs the server to stay up.
-- **Prettier plugins:** `.prettierrc` loads `prettier-plugin-svelte`, `prettier-plugin-tailwindcss` and `@ianvs/prettier-plugin-sort-imports`, in that order. After a bump to any of them, run `npm run format` and check that the diff only reorders imports or classes.
+- **Prettier plugins:** `.prettierrc` loads `prettier-plugin-svelte`, `@ianvs/prettier-plugin-sort-imports` and `prettier-plugin-tailwindcss`, in that order. The Tailwind plugin has to stay last: a plugin listed after it takes over the ts printer, and classes in `cn()` go unsorted while `prettier --check` stays green. After a bump to any of them, run `npx vitest run src/prettier-plugins.spec.ts`, then `npm run format` and check that the diff only reorders imports or classes.
+- **commitlint and release-it:** run `npx vitest run src/release-tooling.spec.ts`. It checks that a valid message passes and a bad one fails, that the changelog preset resolves to one version, and runs the real `release-it --changelog` in a temp repo. A preset mismatch once left GitHub release bodies empty without any error. To dry-run a release from a branch, run `npx release-it --dry-run --ci --no-git.requireBranch --no-git.requireCleanWorkingDir`.
 - **Playwright:** a new version needs its own browser build. Installing it can remove an older one, so finish any comparison against main that runs a browser before bumping Playwright.
 
 ### Per-commit steps
 
-None beyond `npm ci`. There are no hooks.
+The `pre-commit` hook runs `npm run lint` on every commit, and `pre-push` runs `npm run check`. That adds about 4 seconds to each commit and about 4.5 to each push. If a hook fails, fix the cause; don't skip it with `--no-verify`.
 
 ### Manual checks
 
@@ -92,4 +104,4 @@ None beyond `npm ci`. There are no hooks.
 
 ### Setup
 
-The release-age gate is in `.npmrc`. There is no Dependabot config. If one is added, give it a matching `cooldown`.
+The release-age gate is in `.npmrc`. Dependabot (`.github/dependabot.yml`) only updates GitHub Actions, monthly and grouped, with a 7-day `cooldown` to match. npm dependencies are updated by hand as described here.
