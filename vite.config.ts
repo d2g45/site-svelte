@@ -4,8 +4,8 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import tailwindcss from '@tailwindcss/vite'
 import { playwright } from '@vitest/browser-playwright'
 import Icons from 'unplugin-icons/vite'
-import { defineConfig } from 'vite'
 import devtoolsJson from 'vite-plugin-devtools-json'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [
