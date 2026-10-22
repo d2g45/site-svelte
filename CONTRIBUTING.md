@@ -82,6 +82,7 @@ None beyond `npm ci`. There are no hooks.
 
 - Load the home page with `npm run preview` and confirm the 3D scene renders and the model loads. Specs can't check WebGL output.
 - With a real `.env`, run `npm run build && npm run preview` and confirm the page requests `https://cloud.umami.is/script.js`. The layout adds the tag in the browser, outside dev only, so it isn't in the built `index.html`.
+- On a phone, confirm the scene tilts with the device, on the production build. `npm run dev` pre-bundles dependencies differently from `vite build`, so a dev check doesn't cover the built bundle. Chrome sends orientation events only to secure pages, so `http://<LAN address>` never tilts. Either forward the port (`adb reverse tcp:4173 tcp:4173`, or Port forwarding in `chrome://inspect`) and open `localhost:4173`, or serve with `npm run preview -- --host` and add the address to `chrome://flags/#unsafely-treat-insecure-origin-as-secure` on the phone, then turn the flag off afterwards. iPhones don't tilt at all yet, because the page never calls `DeviceOrientationEvent.requestPermission()`.
 
 ### Installs
 
