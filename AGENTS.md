@@ -35,7 +35,7 @@ Project-wide: `npm run lint` (prettier `--check` + eslint), `npm run format`, `n
 
 - TypeScript, no `any`. Tailwind v4 for styling.
 - Two-space indent, single quotes, no semicolons, trailing commas (`.prettierrc`).
-- Icons via `@iconify/svelte`.
+- Icons via `unplugin-icons`: import each one from `~icons/<set>/<name>`. Icon sets are `@iconify-json/*` devDependencies, and `autoInstall` is off.
 
 ## Tooling Notes
 
