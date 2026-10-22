@@ -36,11 +36,14 @@
     "svelte": "^5.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@eslint/compat": "^2.1.1",
     "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@iconify/svelte": "^5.2.2",
     "@playwright/test": "^1.64.1",
+    "@release-it/conventional-changelog": "^12.0.2",
     "@sveltejs/adapter-static": "^4.0.0",
     "@sveltejs/kit": "^3.1.0",
     "@sveltejs/load-config": "^0.2.2",
@@ -55,11 +58,14 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.23.1",
     "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "knip": "^6.41.0",
     "playwright": "^1.64.1",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "publint": "^0.3.25",
+    "release-it": "^21.1.1",
     "svelte": "^5.57.2",
     "svelte-check": "^4.7.6",
     "svelte-meta-tags": "^5.0.3",
@@ -85,5 +91,8 @@
   "imports": {
     "#lib": "./src/lib/index.js",
     "#lib/*": "./src/lib/*"
+  },
+  "overrides": {
+    "conventional-changelog-conventionalcommits": "^10.4.0"
   }
 }
