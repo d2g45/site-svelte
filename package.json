@@ -38,6 +38,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@iconify/svelte": "^5.2.1",
     "@playwright/test": "^1.58.2",
     "@sveltejs/adapter-static": "^3.0.10",
@@ -47,7 +48,9 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/three": "^0.183.1",
     "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.15.0",
@@ -74,11 +77,8 @@
   ],
   "dependencies": {
     "@fontsource-variable/fira-code": "^5.2.7",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@threlte/core": "^8.4.1",
     "@threlte/extras": "^9.8.1",
-    "@types/three": "^0.183.1",
-    "@vitest/browser-playwright": "^4.0.18",
     "svelte-device-info": "^1.0.6",
     "three": "^0.183.2"
   }
