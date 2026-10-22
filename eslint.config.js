@@ -43,6 +43,13 @@ export default ts.config(
     },
   },
   {
+    // the Lighthouse CI configs are CommonJS
+    files: ['**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: {
       parserOptions: {

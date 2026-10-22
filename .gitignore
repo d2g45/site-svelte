@@ -1,4 +1,6 @@
 test-results
+lighthouse-report
+.lighthouseci
 node_modules
 
 # Output

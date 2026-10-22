@@ -15,7 +15,10 @@
     "test": "npm run test:unit -- --run && npm run test:e2e",
     "test:e2e": "playwright test",
     "release": "release-it",
-    "knip": "knip"
+    "knip": "knip",
+    "lighthouse": "npm run build && npm run lighthouse:desktop && npm run lighthouse:mobile",
+    "lighthouse:desktop": "npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.desktop.cjs",
+    "lighthouse:mobile": "npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.cjs"
   },
   "files": [
     "dist",
