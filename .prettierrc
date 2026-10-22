@@ -9,8 +9,8 @@
   "bracketSameLine": true,
   "plugins": [
     "prettier-plugin-svelte",
-    "prettier-plugin-tailwindcss",
-    "@ianvs/prettier-plugin-sort-imports"
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
   ],
   "importOrder": ["^svelte", "^@?\\w", "^[./]"],
   "importOrderParserPlugins": ["typescript", "decorators-legacy"],
