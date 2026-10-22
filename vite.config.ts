@@ -17,7 +17,7 @@ export default defineConfig({
       adapter: adapter({ strict: false, fallback: 'index.html' }),
     }),
     devtoolsJson(),
-    Icons({ compiler: 'svelte', autoInstall: true }),
+    Icons({ compiler: 'svelte', autoInstall: false, scale: 1 }),
   ],
   test: {
     expect: { requireAssertions: true },

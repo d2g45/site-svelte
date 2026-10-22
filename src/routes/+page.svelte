@@ -1,13 +1,17 @@
 <script lang="ts">
+  import GithubIcon from '~icons/hugeicons/github'
+  import LinkedinIcon from '~icons/hugeicons/linkedin-01'
+  import MailboxIcon from '~icons/hugeicons/mailbox-01'
+  import type { Component } from 'svelte'
   import { JsonLd, MetaTags, type JsonLdProps, type MetaTagsProps } from 'svelte-meta-tags'
-  import Icon from '@iconify/svelte'
+  import type { SvelteHTMLElements } from 'svelte/elements'
 
   type Link = {
     id: string
     to: string
     target?: '_blank' | 'self'
     title: string
-    icon: string
+    icon: Component<SvelteHTMLElements['svg']>
     rel?: string
   }
 
@@ -16,7 +20,7 @@
       id: 'email',
       to: 'mailto:me@danieldeguzman.com',
       title: 'Send me an email',
-      icon: 'hugeicons:mailbox-01',
+      icon: MailboxIcon,
       rel: 'reply-to',
     },
     {
@@ -24,7 +28,7 @@
       to: 'https://github.com/d2g45',
       target: '_blank',
       title: 'Take a look at my repositories on GitHub',
-      icon: 'hugeicons:github',
+      icon: GithubIcon,
       rel: 'noopener noreferrer external',
     },
     {
@@ -32,7 +36,7 @@
       to: 'https://linkedin.com/in/danieldeguzman',
       target: '_blank',
       title: 'Check out my LinkedIn profile!',
-      icon: 'hugeicons:linkedin-01',
+      icon: LinkedinIcon,
       rel: 'noopener noreferrer external',
     },
   ]
@@ -132,7 +136,7 @@
             title={link.title}
             rel={link.rel}
             class="flex size-12 flex-col items-center justify-center gap-4 text-2xl text-current transition-colors duration-300 ease-in-out hover:text-emerald-500 md:text-3xl lg:text-5xl">
-            <Icon icon={link.icon} />
+            <link.icon aria-hidden="true" />
             <span class="sr-only">{link.title}</span>
           </a>
         {/each}
