@@ -14,7 +14,7 @@
   const links: Link[] = [
     {
       id: 'email',
-      to: 'mailto:me@danieldeguzman',
+      to: 'mailto:me@danieldeguzman.com',
       title: 'Send me an email',
       icon: 'hugeicons:mailbox-01',
       rel: 'reply-to',

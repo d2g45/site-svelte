@@ -10,4 +10,11 @@ describe('/+page.svelte', () => {
     const heading = page.getByRole('heading', { level: 1 })
     await expect.element(heading).toBeInTheDocument()
   })
+
+  it('should link to the full email address', async () => {
+    await render(Page)
+
+    const email = page.getByRole('link', { name: 'Send me an email' })
+    await expect.element(email).toHaveAttribute('href', 'mailto:me@danieldeguzman.com')
+  })
 })
