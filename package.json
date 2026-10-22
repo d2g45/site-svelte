@@ -41,8 +41,9 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@iconify/svelte": "^5.2.2",
     "@playwright/test": "^1.64.1",
-    "@sveltejs/adapter-static": "^3.0.10",
-    "@sveltejs/kit": "^2.70.3",
+    "@sveltejs/adapter-static": "^4.0.0",
+    "@sveltejs/kit": "^3.1.0",
+    "@sveltejs/load-config": "^0.2.2",
     "@sveltejs/package": "^2.5.8",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/forms": "^0.5.11",
@@ -81,5 +82,9 @@
     "@threlte/extras": "^9.22.1",
     "svelte-device-info": "^1.0.6",
     "three": "^0.186.1"
+  },
+  "imports": {
+    "#lib": "./src/lib/index.js",
+    "#lib/*": "./src/lib/*"
   }
 }
