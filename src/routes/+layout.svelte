@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { dev } from '$app/environment'
-  import { env } from '$env/dynamic/public'
+  import { dev } from '$app/env'
+  import { PUBLIC_UMAMI_ID } from '$app/env/public'
   import '../app.css'
 
   let { children } = $props()
 
-  let umami: string | undefined = env.PUBLIC_UMAMI_ID
+  let umami: string | undefined = PUBLIC_UMAMI_ID
 </script>
 
 <svelte:head>

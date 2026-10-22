@@ -100,7 +100,7 @@
     },
   }
 
-  let homeScene = () => import('$lib/components/3d/home-scene.svelte')
+  let homeScene = () => import('#lib/components/3d/home-scene.svelte')
 </script>
 
 <MetaTags {...meta} />

@@ -1,19 +1,23 @@
+import adapter from '@sveltejs/adapter-static'
 import { sveltekit } from '@sveltejs/kit/vite'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import tailwindcss from '@tailwindcss/vite'
 import { playwright } from '@vitest/browser-playwright'
 import Icons from 'unplugin-icons/vite'
-import { defineConfig } from 'vite'
 import devtoolsJson from 'vite-plugin-devtools-json'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
-    sveltekit(),
-    devtoolsJson(),
-    Icons({
-      compiler: 'svelte',
-      autoInstall: true,
+    sveltekit({
+      // Consult https://svelte.dev/docs/kit/integrations
+      // for more information about preprocessors
+      preprocess: vitePreprocess(),
+      adapter: adapter({ strict: false, fallback: 'index.html' }),
     }),
+    devtoolsJson(),
+    Icons({ compiler: 'svelte', autoInstall: true }),
   ],
   test: {
     expect: { requireAssertions: true },
@@ -29,7 +33,6 @@ export default defineConfig({
           },
           include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
           exclude: ['src/lib/server/**'],
-          setupFiles: ['./vitest-setup-client.ts'],
         },
       },
       {
