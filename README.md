@@ -1,42 +1,48 @@
 # Daniel De Guzman's site
 
-Site rebuilt in Svelte.
+The source for [danieldeguzman.com](https://danieldeguzman.com): one page with links to email, GitHub and LinkedIn, over a wireframe 3D model that follows the pointer. Built with SvelteKit, Tailwind v4 and [Threlte](https://threlte.xyz) (three.js for Svelte).
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Use the Node version in `.nvmrc` and check that `npm -v` prints 11.x. npm 10 ignores the release-age gate in `.npmrc` without a warning.
 
 ```sh
+nvm use
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+`.env` is optional. It holds only `PUBLIC_UMAMI_ID`, and without it the site builds and runs with analytics off.
 
-To build your library:
+| Command           | Does                                                 |
+| ----------------- | ---------------------------------------------------- |
+| `npm run dev`     | Dev server                                           |
+| `npm run build`   | Static build in `build/`                             |
+| `npm run preview` | Serves the last build on port 4173                   |
+| `npm run lint`    | Prettier check and ESLint                            |
+| `npm run check`   | svelte-check                                         |
+| `npm test`        | Vitest (Node and Chromium projects), then Playwright |
+| `npm run knip`    | Unused files, exports and dependencies               |
 
-```sh
-npm run package
-```
+[CONTRIBUTING.md](CONTRIBUTING.md) covers commits, the git hooks, CI and dependency updates. [AGENTS.md](AGENTS.md) has the same essentials for coding agents.
 
-To create a production version of your showcase app:
+## How it's built
 
-```sh
-npm run build
-```
+- SvelteKit with `adapter-static` and `fallback: 'index.html'`. `src/routes/+layout.ts` turns off SSR and prerendering, so the page renders in the browser. The Svelte config is inline in `vite.config.ts`.
+- `src/routes/+page.svelte` is the only page. It holds the links, the meta tags and the JSON-LD.
+- Icons come from [unplugin-icons](https://github.com/unplugin/unplugin-icons) and are compiled into the page as inline SVGs. Each one is imported from `~icons/<set>/<name>`, and the icon sets are `@iconify-json/*` devDependencies.
+- `src/routes/+layout.svelte` adds the Umami script in production builds when `PUBLIC_UMAMI_ID` is set.
 
-You can preview the production build with `npm run preview`.
+## The 3D scene
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+`+page.svelte` loads the scene with a dynamic `import('#lib/components/3d/home-scene.svelte')`. three.js ends up in its own chunk (the one the build warns is over 500 kB), and the links render without waiting for it. `#lib/*` is an import map entry in `package.json` that points at `src/lib/*`.
 
-## Publishing
+The components are in `src/lib/components/3d/`:
 
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+- **`home-scene.svelte`** sets up the Threlte `<Canvas>` with a point light and a perspective camera at `z = 6`, and puts `daniel` and `rig` inside a `<Suspense>`.
+- **`daniel.svelte`** loads the model with `useGltf('/three/daniel-whole.min.gltf')` and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. It passes a Draco loader, but the model isn't Draco-compressed, so the decoder is never fetched.
+- **`rig.svelte`** moves the camera. An invisible 100 × 100 plane catches pointer moves through Threlte's `interactivity()`, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
 
-To publish your library to [npm](https://www.npmjs.com):
+The model files are in `static/three/`. The page loads `daniel-whole.min.gltf` and the `daniel-whole.bin` buffer it references. Nothing in `src` references the other files there: the FBX files, `daniel-whole.gltf`, the `daniel-fractured` model and `daniel-whole-transformed.glb`.
 
-```sh
-npm publish
-```
+The scene draws into WebGL, so the tests can't check its output. Check it in a browser after changes, as described under Manual checks in CONTRIBUTING.
