@@ -39,9 +39,9 @@ npm run dev
 
 The components are in `src/lib/components/3d/`:
 
-- **`home-scene.svelte`** sets up the Threlte `<Canvas>` with a point light and a perspective camera at `z = 6`, and puts `daniel` and `rig` inside a `<Suspense>`.
-- **`daniel.svelte`** loads the model with `useGltf('/three/daniel-whole.min.gltf')` and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. It passes a Draco loader, but the model isn't Draco-compressed, so the decoder is never fetched.
-- **`rig.svelte`** moves the camera. An invisible 100 × 100 plane catches pointer moves through Threlte's `interactivity()`, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
+- **`home-scene.svelte`** sets up the Threlte `<Canvas>` and puts `daniel` and `rig` inside it. The scene uses Threlte's default camera, a perspective camera at `z = 5`, and has no lights, because the normal material doesn't use them.
+- **`daniel.svelte`** loads the model with three's `GLTFLoader` through Threlte's `useLoader`, and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. Nothing renders until the model has loaded.
+- **`rig.svelte`** moves the camera. A window `pointermove` listener maps the pointer to a point in front of the model, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
 
 The model files are in `static/three/`: `daniel-whole.min.gltf` and the `daniel-whole.bin` buffer it references.
 
