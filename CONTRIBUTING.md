@@ -78,7 +78,6 @@ The build warns that some chunks are over 500 kB. That is the three.js chunk, an
 ### After bumping X
 
 - **Build-path packages** (`@sveltejs/kit`, `vite`, `@sveltejs/vite-plugin-svelte`, `svelte`, `tailwindcss`, `three`, `@threlte/*`): build main and the branch and compare the output with content hashes masked. Explain every file that differs.
-  - Since three r186, the build includes about 1.9 MB of Draco and Basis decoder files that the site never requests. The model isn't Draco-compressed, and `useDraco` points at the gstatic CDN.
   - To compare the two builds in a browser, run `npm run build && npm run preview -- --port 4174` in the [HEAD worktree](#head-worktree-setup) and `npm run build && npm run preview` on the branch, then open both. `npm run preview` only serves the last build of the tree it runs in, from `.svelte-kit/output`, and ignores `--outDir`, so it can't serve a copied `build/` folder.
 - **SvelteKit migrations:** `npx sv@<version> migrate <name>` runs `prettier --write` over the whole repo. Review the full diff, not only the files the migration targets.
 - **Vitest and other dev servers:** check GitHub advisories before taking a recent major. Vitest 5.0.0 to 5.0.4 served `.env` from the Browser Mode server (GHSA-p458-7748-mcp3), and this repo's `test.projects` setup exposed it. Outside a terminal, `vitest` runs once and exits, so use `vitest watch` for anything that needs the server to stay up.

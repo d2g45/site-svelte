@@ -24,7 +24,7 @@ npm run dev
 | `npm test`        | Vitest (Node and Chromium projects), then Playwright |
 | `npm run knip`    | Unused files, exports and dependencies               |
 
-[CONTRIBUTING.md](CONTRIBUTING.md) covers commits, the git hooks, CI and dependency updates. [AGENTS.md](AGENTS.md) has the same essentials for coding agents.
+[CONTRIBUTING.md](CONTRIBUTING.md) covers commits, the git hooks, CI and dependency updates. [AGENTS.md](AGENTS.md) is a shorter version of these docs for coding agents.
 
 ## How it's built
 
@@ -39,9 +39,9 @@ npm run dev
 
 The components are in `src/lib/components/3d/`:
 
-- **`home-scene.svelte`** sets up the Threlte `<Canvas>` and puts `daniel` and `rig` inside it. The scene uses Threlte's default camera, a perspective camera at `z = 5`, and has no lights, because the normal material doesn't use them.
-- **`daniel.svelte`** loads the model with three's `GLTFLoader` through Threlte's `useLoader`, and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. Nothing renders until the model has loaded.
-- **`rig.svelte`** moves the camera. A window `pointermove` listener maps the pointer to a point in front of the model, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
+- `home-scene.svelte` sets up the Threlte `<Canvas>` and puts `daniel` and `rig` inside it. The scene uses Threlte's default camera, a perspective camera at `z = 5`, and has no lights, because the normal material doesn't use them.
+- `daniel.svelte` loads the model with three's `GLTFLoader` through Threlte's `useLoader`, and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. Nothing renders until the model has loaded.
+- `rig.svelte` moves the camera. A window `pointermove` listener maps the pointer to a point in front of the model, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
 
 The model files are in `static/three/`: `daniel-whole.min.gltf` and the `daniel-whole.bin` buffer it references.
 
