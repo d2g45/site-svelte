@@ -43,6 +43,6 @@ The components are in `src/lib/components/3d/`:
 - **`daniel.svelte`** loads the model with `useGltf('/three/daniel-whole.min.gltf')` and draws the `Daniel_Whole` mesh as a wireframe with a normal material, scaled to 0.1 and rotated 90° on the x axis. It passes a Draco loader, but the model isn't Draco-compressed, so the decoder is never fetched.
 - **`rig.svelte`** moves the camera. An invisible 100 × 100 plane catches pointer moves through Threlte's `interactivity()`, and on phones (`svelte-device-info`) `deviceorientation` does the same from the tilt angles. Each frame the camera eases 5% of the way toward that point and looks back at the origin. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted.
 
-The model files are in `static/three/`. The page loads `daniel-whole.min.gltf` and the `daniel-whole.bin` buffer it references. Nothing in `src` references the other files there: the FBX files, `daniel-whole.gltf`, the `daniel-fractured` model and `daniel-whole-transformed.glb`.
+The model files are in `static/three/`: `daniel-whole.min.gltf` and the `daniel-whole.bin` buffer it references.
 
 The scene draws into WebGL, so the tests can't check its output. Check it in a browser after changes, as described under Manual checks in CONTRIBUTING.
