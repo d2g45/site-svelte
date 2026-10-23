@@ -21,7 +21,7 @@ function makeConfig({ outputDir, settings, assertions }) {
         url: ['http://localhost:4173/'],
         startServerCommand: 'npx vite preview --port 4173 --strictPort',
         startServerReadyPattern: 'Local',
-        // median of 3 runs, to damp lab noise
+        // 3 runs; the assertions use the best of them (see categoryAssertions)
         numberOfRuns: 3,
         settings,
       },
