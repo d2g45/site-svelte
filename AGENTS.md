@@ -28,7 +28,7 @@ Project-wide: `npm run lint` (prettier `--check` + eslint), `npm run format`, `n
 ## Architecture
 
 - SvelteKit with adapter-static (`fallback: 'index.html'`). The Svelte config is inline in `vite.config.ts`; there is no `svelte.config.js`.
-- One page, `src/routes/+page.svelte`. It lazy-loads the Threlte/three.js scene from `src/lib/components/3d/` through the `#lib/*` import map; the models are in `static/three/`.
+- One page, `src/routes/+page.svelte`. It lazy-loads the Threlte/three.js scene from `src/lib/components/3d/` through the `#lib/*` import map. The model, `daniel-whole.min.gltf` and its `.bin`, is in `static/three/`.
 - Env vars are declared in `src/env.ts`.
 
 ## Conventions
@@ -42,5 +42,5 @@ Project-wide: `npm run lint` (prettier `--check` + eslint), `npm run format`, `n
 - Keep `prettier-plugin-tailwindcss` **last** in `.prettierrc`'s `plugins`. It wraps the other plugins' printers, so a plugin listed after it takes over the ts printer: `cn()` goes unsorted in `<script>` blocks and `.ts` files while markup still sorts, and `prettier --check` stays green. Run `npx vitest run src/prettier-plugins.spec.ts` after bumping any Prettier plugin; it also covers `@ianvs/prettier-plugin-sort-imports`.
 - Bump the `conventional-changelog-conventionalcommits` entry in `overrides` in the same commit as any `@release-it/conventional-changelog` major: v12 needs the preset at `^10`, v11 at `^9`. commitlint's `config-conventional` also depends on the preset, and the changelog engine loads it by bare name, so two copies or a stale override give an empty release body or `headerPartial is not a function`. `src/release-tooling.spec.ts` runs the real `release-it --changelog` in a temp repo and fails on either.
 - Releasing: `GITHUB_TOKEN="$(gh auth token)" npm run release` from `main`. Pass a version (`npm run release -- 1.2.0`) to override the one release-it picks. To dry-run from a feature branch, `npx release-it --dry-run --ci --no-git.requireBranch --no-git.requireCleanWorkingDir`. See [Releasing in CONTRIBUTING.md](CONTRIBUTING.md#releasing).
-- Known audit finding: release-it brings basic-ftp <=6.2.0 (GHSA-c475-qrg2-pj4r) through `proxy-agent` and `get-uri`, which requires `^5.3.1`. It is only reachable when a proxy PAC file is fetched over `ftp://`. Accepted until a `get-uri` release allows basic-ftp 6.2.1.
+- Known audit findings (basic-ftp through release-it, postcss-selector-parser through `@tailwindcss/typography`) are explained under [ncu flags in CONTRIBUTING.md](CONTRIBUTING.md#ncu-flags). Both stay until the upstream release named there comes out.
 - Lighthouse runs through a pinned `npx --yes @lhci/cli@<version>` in `package.json`, not as a devDependency, which would add a dozen audit findings.
