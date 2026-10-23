@@ -48,5 +48,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     force: true,
+    include: ['@threlte/core', 'svelte-device-info', 'three', 'three/addons/loaders/GLTFLoader.js'],
   },
 })
