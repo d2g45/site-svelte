@@ -8,6 +8,16 @@
 - PRs are squash-merged, so split a PR into commits for review and don't worry about tidying them afterwards.
 - `npm run knip` lists unused files, exports and dependencies. `npm run lighthouse` builds the site and audits `/` on desktop and mobile; the score floors are in `lighthouserc.*.cjs`. Neither runs in CI.
 
+## Releasing
+
+Release from an up-to-date `main`. release-it needs a GitHub token in `GITHUB_TOKEN` to create the GitHub release:
+
+```sh
+GITHUB_TOKEN="$(gh auth token)" npm run release
+```
+
+It runs `npm test`, picks the version from the commits since the last tag, bumps `package.json` and the lockfile, commits `chore(release): <version>`, tags it, pushes, and creates the GitHub release. To choose the version yourself, pass it: `npm run release -- 1.2.0`. To try it from a branch without changing anything, run `npx release-it --dry-run --ci --no-git.requireBranch --no-git.requireCleanWorkingDir`.
+
 ## Dependency updates
 
 Dependencies are updated in one PR per run, on a `chore/YYYY-MM-package-updates` branch: patch and minor versions in one commit, each major in its own commit, then `npm audit fix`. CI runs lint, check and test, and the hooks run lint and check. Everything else below is run by hand.
