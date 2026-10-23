@@ -47,11 +47,11 @@ ncu --peer --format group --reject typescript
 ```sh
 npm run lint    # prettier --check . and eslint . (both run; either failing fails)
 npm run check   # svelte-kit sync && svelte-check
-npm test        # vitest run (server + browser projects), then playwright test
+npm test        # vitest run (client and server projects), then playwright test
 ```
 
 - Prettier reads `.gitignore` but not your global git ignore file, so `.prettierignore` lists `.claude/settings.local.json`. Add any other locally ignored file there if lint trips on it.
-- `check` should report 0 errors. The one warning, `globalThis.onpointermove` in `src/lib/components/3d/daniel.svelte`, is known.
+- `check` should report 0 errors and 0 warnings.
 - The Vitest `client` project runs in Chromium through Playwright, and `test:e2e` runs `npm run build && npm run preview` on port 4173. Install browsers once per Playwright version with `npx playwright install chromium`, after checking `~/Library/Caches/ms-playwright`.
 - No services are needed.
 
