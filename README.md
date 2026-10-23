@@ -24,7 +24,7 @@ npm run dev
 | `npm test`        | Vitest (Node and Chromium projects), then Playwright |
 | `npm run knip`    | Unused files, exports and dependencies               |
 
-[CONTRIBUTING.md](CONTRIBUTING.md) covers commits, the git hooks, CI and dependency updates. [AGENTS.md](AGENTS.md) is a shorter version of these docs for coding agents.
+[CONTRIBUTING.md](CONTRIBUTING.md) covers commits, the git hooks, CI, releasing and dependency updates. [AGENTS.md](AGENTS.md) is a shorter version of these docs for coding agents.
 
 ## How it's built
 

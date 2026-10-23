@@ -3,7 +3,7 @@
 ## Commits
 
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/). commitlint (`commitlint.config.mjs`) checks them in husky's `commit-msg` hook. `feat`, `fix` and `perf` commits go into the release notes.
-- `pre-commit` runs `npm run lint` and `pre-push` runs `npm run check`, a few seconds each. `npm install` sets the hooks up through the `prepare` script.
+- `pre-commit` runs `npm run lint` and `pre-push` runs `npm run check`, which adds about 4 seconds to each commit and 4.5 to each push. `npm install` sets the hooks up through the `prepare` script.
 - CI (`.github/workflows/pr-validation.yml`) runs lint, check and the full test suite on every PR and every push to `main`.
 - PRs are squash-merged, so split a PR into commits for review and don't worry about tidying them afterwards.
 - `npm run knip` lists unused files, exports and dependencies. `npm run lighthouse` builds the site and audits `/` on desktop and mobile; the score floors are in `lighthouserc.*.cjs`. Neither runs in CI.
@@ -97,13 +97,13 @@ The build warns that some chunks are over 500 kB. That is the three.js chunk, an
 
 ### Per-commit steps
 
-The `pre-commit` hook runs `npm run lint` on every commit, and `pre-push` runs `npm run check`. That adds about 4 seconds to each commit and about 4.5 to each push. If a hook fails, fix the cause; don't skip it with `--no-verify`.
+The [hooks](#commits) run lint on every commit and check on every push. If a hook fails, fix the cause; don't skip it with `--no-verify`.
 
 ### Manual checks
 
 - Load the home page with `npm run preview` and confirm the 3D scene renders and the model loads. Specs can't check WebGL output.
 - With a real `.env`, run `npm run build && npm run preview` and confirm the page requests `https://cloud.umami.is/script.js`. The layout adds the tag in the browser, outside dev only, so it isn't in the built `index.html`.
-- On a phone, confirm the scene tilts with the device, on the production build. `npm run dev` pre-bundles dependencies differently from `vite build`, so a dev check doesn't cover the built bundle. Chrome sends orientation events only to secure pages, so `http://<LAN address>` never tilts. Either forward the port (`adb reverse tcp:4173 tcp:4173`, or Port forwarding in `chrome://inspect`) and open `localhost:4173`, or serve with `npm run preview -- --host` and add the address to `chrome://flags/#unsafely-treat-insecure-origin-as-secure` on the phone, then turn the flag off afterwards. iPhones don't tilt, because the page never calls `DeviceOrientationEvent.requestPermission()`. That's accepted, so skip the check there.
+- On a phone, confirm the scene tilts with the device, on the production build. `npm run dev` pre-bundles dependencies differently from `vite build`, so a dev check doesn't cover the built bundle. Chrome sends orientation events only to secure pages, so `http://<LAN address>` never tilts. Either forward the port (`adb reverse tcp:4173 tcp:4173`, or Port forwarding in `chrome://inspect`) and open `localhost:4173`, or serve with `npm run preview -- --host` and add the address to `chrome://flags/#unsafely-treat-insecure-origin-as-secure` on the phone, then turn the flag off afterwards. iPhones don't tilt (see [The 3D scene](README.md#the-3d-scene)), so skip the check there.
 
 ### Installs
 
