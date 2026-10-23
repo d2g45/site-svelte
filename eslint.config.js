@@ -24,7 +24,7 @@ export default ts.config(
       globals: { ...globals.browser, ...globals.node },
     },
     rules: {
-      // typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
+      // typescript-eslint recommends turning off no-undef in TypeScript projects
       // see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
       'no-undef': 'off',
       '@typescript-eslint/no-unused-vars': [
@@ -37,7 +37,7 @@ export default ts.config(
         },
       ],
 
-      // the rule has a few issues at the moment
+      // the rule doesn't handle links with search params; off until this issue is fixed
       // https://github.com/sveltejs/eslint-plugin-svelte/issues/1327
       'svelte/no-navigation-without-resolve': 'off',
     },

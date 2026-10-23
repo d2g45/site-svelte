@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { useDraco, useGltf } from '@threlte/extras'
+  import { T, useLoader } from '@threlte/core'
+  import { Mesh } from 'three'
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
-  const dracoLoader = useDraco()
-  const model = useGltf('/three/daniel-whole.min.gltf', { dracoLoader })
+  const gltf = useLoader(GLTFLoader).load('/three/daniel-whole.min.gltf')
+  const node = $derived($gltf?.scene.getObjectByName('Daniel_Whole'))
 </script>
 
-{#if $model}
+{#if node instanceof Mesh}
   <T.Group scale={0.1} rotation={[Math.PI / 2, 0, 0]}>
-    <T.Mesh geometry={$model.nodes.Daniel_Whole.geometry}>
-      <T.MeshNormalMaterial material={$model.materials.Outer} wireframe />
+    <T.Mesh geometry={node.geometry}>
+      <T.MeshNormalMaterial wireframe />
     </T.Mesh>
   </T.Group>
 {/if}
