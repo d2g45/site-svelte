@@ -3,6 +3,7 @@
 ## Commits
 
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/). commitlint (`commitlint.config.mjs`) checks them in husky's `commit-msg` hook. `feat`, `fix` and `perf` commits go into the release notes.
+- Put `#` names that aren't issue or PR numbers in backticks, like `` `#lib/*` ``. The changelog reads a bare `#lib` anywhere in a commit message as an issue reference and adds "references #lib" to the release notes. The squash message includes every commit message in the PR, so this goes for each commit as well as the PR title.
 - `pre-commit` runs `npm run lint` and `pre-push` runs `npm run check`, which adds about 4 seconds to each commit and 4.5 to each push. `npm install` sets the hooks up through the `prepare` script.
 - CI (`.github/workflows/pr-validation.yml`) runs lint, check and the full test suite on every PR and every push to `main`.
 - PRs are squash-merged, so split a PR into commits for review and don't worry about tidying them afterwards.
