@@ -49,7 +49,6 @@ ncu --peer --format group --reject typescript
   ```
 
 - **Follows by hand: `tailwindcss`.** `@tailwindcss/vite` depends on an exact `tailwindcss` version as a regular dependency, so `--peer` never flags a mismatch. Keep the root `tailwindcss` at the same version as `@tailwindcss/vite`.
-- **Known audit finding: `postcss-selector-parser` 6.0.10** (GHSA-rj75-hqrm-r3gf). `@tailwindcss/typography` 0.5.20 pins it exactly. It is only used at build time, and the fix npm offers is a downgrade to typography 0.5.4. It stays until typography releases with a newer version.
 - **Known audit finding: `basic-ftp` <=6.2.0** (GHSA-c475-qrg2-pj4r), shown as six entries. It comes from `release-it` through `proxy-agent`, `pac-proxy-agent` and `get-uri`, and every `get-uri` requires `basic-ftp@^5.3.1`, while the fix is 6.2.1. It is only reachable when release-it fetches a proxy PAC file over `ftp://`. It stays until `get-uri` allows the fixed version.
 - **Pinned together: the changelog preset.** `overrides` pins `conventional-changelog-conventionalcommits`. Bump it in the same commit as any `@release-it/conventional-changelog` major: v12 needs `^10`, v11 needs `^9`. commitlint's `config-conventional` also depends on the preset, and the changelog engine loads it by bare name, so two copies or a stale override leave the GitHub release body empty or fail with `headerPartial is not a function`. See [After bumping X](#after-bumping-x).
 
