@@ -3,6 +3,7 @@
 ## Commits
 
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/). commitlint (`commitlint.config.mjs`) checks them in husky's `commit-msg` hook. `feat`, `fix` and `perf` commits go into the release notes.
+- Put `#` names that aren't issue or PR numbers in backticks, like `` `#lib/*` ``. The changelog reads a bare `#lib` anywhere in a commit message as an issue reference and adds "references #lib" to the release notes. The squash message includes every commit message in the PR, so this goes for each commit as well as the PR title.
 - `pre-commit` runs `npm run lint` and `pre-push` runs `npm run check`, which adds about 4 seconds to each commit and 4.5 to each push. `npm install` sets the hooks up through the `prepare` script.
 - CI (`.github/workflows/pr-validation.yml`) runs lint, check and the full test suite on every PR and every push to `main`.
 - PRs are squash-merged, so split a PR into commits for review and don't worry about tidying them afterwards.
@@ -48,7 +49,6 @@ ncu --peer --format group --reject typescript
   ```
 
 - **Follows by hand: `tailwindcss`.** `@tailwindcss/vite` depends on an exact `tailwindcss` version as a regular dependency, so `--peer` never flags a mismatch. Keep the root `tailwindcss` at the same version as `@tailwindcss/vite`.
-- **Known audit finding: `postcss-selector-parser` 6.0.10** (GHSA-rj75-hqrm-r3gf). `@tailwindcss/typography` 0.5.20 pins it exactly. It is only used at build time, and the fix npm offers is a downgrade to typography 0.5.4. It stays until typography releases with a newer version.
 - **Known audit finding: `basic-ftp` <=6.2.0** (GHSA-c475-qrg2-pj4r), shown as six entries. It comes from `release-it` through `proxy-agent`, `pac-proxy-agent` and `get-uri`, and every `get-uri` requires `basic-ftp@^5.3.1`, while the fix is 6.2.1. It is only reachable when release-it fetches a proxy PAC file over `ftp://`. It stays until `get-uri` allows the fixed version.
 - **Pinned together: the changelog preset.** `overrides` pins `conventional-changelog-conventionalcommits`. Bump it in the same commit as any `@release-it/conventional-changelog` major: v12 needs `^10`, v11 needs `^9`. commitlint's `config-conventional` also depends on the preset, and the changelog engine loads it by bare name, so two copies or a stale override leave the GitHub release body empty or fail with `headerPartial is not a function`. See [After bumping X](#after-bumping-x).
 

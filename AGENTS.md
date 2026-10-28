@@ -42,5 +42,5 @@ Project-wide: `npm run lint` (prettier `--check` + eslint), `npm run format`, `n
 - Keep `prettier-plugin-tailwindcss` **last** in `.prettierrc`'s `plugins`, and run `npx vitest run src/prettier-plugins.spec.ts` after bumping any Prettier plugin. [Prettier plugins in CONTRIBUTING.md](CONTRIBUTING.md#after-bumping-x) says why.
 - Bump the `conventional-changelog-conventionalcommits` entry in `overrides` in the same commit as any `@release-it/conventional-changelog` major, then run `npx vitest run src/release-tooling.spec.ts`. The versions and the reason are under [ncu flags in CONTRIBUTING.md](CONTRIBUTING.md#ncu-flags).
 - Releasing follows [Releasing in CONTRIBUTING.md](CONTRIBUTING.md#releasing). Read it before running `npm run release`.
-- Known audit findings (basic-ftp through release-it, postcss-selector-parser through `@tailwindcss/typography`) are explained under [ncu flags in CONTRIBUTING.md](CONTRIBUTING.md#ncu-flags). Both stay until the upstream release named there comes out.
+- The known audit finding (basic-ftp through release-it) is explained under [ncu flags in CONTRIBUTING.md](CONTRIBUTING.md#ncu-flags). It stays until the upstream release named there comes out.
 - Lighthouse runs through a pinned `npx --yes @lhci/cli@<version>` in `package.json`, not as a devDependency, which would add a dozen audit findings.
